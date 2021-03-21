@@ -37,7 +37,7 @@
                 </div>
 {% endif %}
 
-<hr>
+
                 <!--           Comments Area -->
                  <div class="col-lg-8 col-md-10 mx-auto comment">
                     {% for comment in post.comments: %}
@@ -55,7 +55,8 @@
                     </ul>
                     {% endfor %}
                 </div>
-
+<hr>
+                <div>
 {% if current_user.is_authenticated: %}
 
                 {{ ckeditor.load() }}
@@ -63,7 +64,7 @@
                 {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
 
 {% endif %}
-
+</div>
             </div>
         </div>
     </div>
