@@ -68,7 +68,17 @@ db.create_all()
 def admin_only(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if current_user.email == "admin@gmail.com" or current_user.is_authenticated():
+        # identifying with an id is better
+        if not current_user.email == "admin@gmail.com":
+            return abort(403)
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+def authenticated_only(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated():
             return abort(403)
         return f(*args, **kwargs)
     return decorated_function
@@ -168,7 +178,7 @@ def contact():
 
 
 @app.route("/new-post", methods=["GET", "POST"])
-@admin_only
+@authenticated_only
 def add_new_post():
     form = CreatePostForm()
     if form.validate_on_submit():
@@ -190,7 +200,7 @@ def add_new_post():
 
 
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
-@admin_only
+@authenticated_only
 def edit_post(post_id):
     post = BlogPost.query.get(post_id)
     edit_form = CreatePostForm(
